@@ -74,6 +74,7 @@ const a = function(as){
 
     function updateRank(){
         clearRankContainer();
+        rides = rides.sort((a, b)=>b.tempo - a.tempo);
         rides = rides.sort((a, b)=>b.getFinalScore() - a.getFinalScore());
         
 
@@ -159,6 +160,7 @@ const a = function(as){
         rankContainer.appendChild(rankDiv);
 
         rankContainer.appendChild(rankInfoBuilder("Nota: ", ride.getFinalScore()));    
+        rankContainer.appendChild(rankInfoBuilder("Tempo: ", ride.tempo.toFixed(2)));
     }
     
     
