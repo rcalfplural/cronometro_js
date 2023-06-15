@@ -5,6 +5,7 @@ const a = function(as){
     const resetButton = document.getElementById("resetButton");
     const rankContainer = document.getElementById("rankContainer");
     const rideBase = {
+        rideLabel: "",
         complete: false,
         tempo: 0,
         bullScore: 0,
@@ -15,7 +16,7 @@ const a = function(as){
         }
     };
 
-    const rides = {};
+    let rides = [];
 
     /**
      * @type {CSSStyleDeclaration}
@@ -54,7 +55,7 @@ const a = function(as){
         const bullName = window.prompt("Informe o nome do animal");
 
         const ride = Object.create(rideBase);
-        rides[riderName.toString()+"_X_"+bullName.toString()] = ride;
+        ride.rideLabel = riderName.toString()+"_X_"+bullName.toString();
 
         ride.complete = counter >= TIMER_GOAL;
         ride.tempo = counter;
@@ -64,9 +65,21 @@ const a = function(as){
             ride.riderScore = Number(window.prompt("Informe a nota do competidor"));
         }
 
+        rides.push(ride);
         console.log(ride.getFinalScore());   
-        console.log(rides);  
+        //console.log(rides);  
+        updateRank();
         
+    }
+
+    function updateRank(){
+        clearRankContainer();
+        rides = rides.sort((a, b)=>b.getFinalScore() - a.getFinalScore());
+        
+
+        for(ride of rides){
+            rankCellBuilder(ride);
+        }
     }
 
     function updateCounter(){
@@ -111,6 +124,11 @@ const a = function(as){
     
     /* DOM FUNCTIONS */
     
+    function clearRankContainer(){
+        while(rankContainer.firstChild){
+            rankContainer.removeChild(rankContainer.firstChild);
+        }
+    }
 
     function rankInfoBuilder(infoLabel, info){
         const pContainer = document.createElement("p");
@@ -133,20 +151,18 @@ const a = function(as){
         const rankH4 = document.createElement("h4");
 
         rankH4.classList.add("rideTitle");
-        rankH4.textContent = "Marcio Lino Sena vs Atrevido";
+        rankH4.textContent = (rides.indexOf(ride)+1)+"º - "+((r)=>r.replace("_X_", " vs. "))(ride.rideLabel);
 
         rankDiv.classList.add("rank");
         rankDiv.appendChild(rankH4);
 
         rankContainer.appendChild(rankDiv);
 
-        rankContainer.appendChild(rankInfoBuilder("Tamanho da Pica: ", "56cm"));    
+        rankContainer.appendChild(rankInfoBuilder("Nota: ", ride.getFinalScore()));    
     }
     
     
     
     reset();
-
-    rankCellBuilder(0);
     console.log(as);
 }(2);
