@@ -3,8 +3,10 @@ const a = function(as){
     const counterSpan = document.getElementById("number");
     const counterButton = document.getElementById("chronoButton");
     const resetButton = document.getElementById("resetButton");
+    const rankContainer = document.getElementById("rankContainer");
     const rideBase = {
         complete: false,
+        tempo: 0,
         bullScore: 0,
         riderScore: 0,
         getFinalScore: function(){
@@ -55,6 +57,7 @@ const a = function(as){
         rides[riderName.toString()+"_X_"+bullName.toString()] = ride;
 
         ride.complete = counter >= TIMER_GOAL;
+        ride.tempo = counter;
         ride.bullScore = Number(window.prompt("Informe a nota do marruco"));
 
         if(ride.complete){
@@ -106,6 +109,44 @@ const a = function(as){
     counterButton.addEventListener("click", startCounter);
     resetButton.addEventListener("click", reset);
     
+    /* DOM FUNCTIONS */
+    
+
+    function rankInfoBuilder(infoLabel, info){
+        const pContainer = document.createElement("p");
+        const label = document.createElement("strong");
+        const infoElement = document.createElement("span");
+
+        label.textContent = infoLabel;
+        infoElement.textContent = info;
+
+        pContainer.classList.add("rankInfo");
+        pContainer.appendChild(label);
+        pContainer.appendChild(infoElement);
+
+        return pContainer;
+    }
+
+    function rankCellBuilder(ride){
+
+        const rankDiv = document.createElement("div");
+        const rankH4 = document.createElement("h4");
+
+        rankH4.classList.add("rideTitle");
+        rankH4.textContent = "Marcio Lino Sena vs Atrevido";
+
+        rankDiv.classList.add("rank");
+        rankDiv.appendChild(rankH4);
+
+        rankContainer.appendChild(rankDiv);
+
+        rankContainer.appendChild(rankInfoBuilder("Tamanho da Pica: ", "56cm"));    
+    }
+    
+    
+    
     reset();
+
+    rankCellBuilder(0);
     console.log(as);
 }(2);
